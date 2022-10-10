@@ -1,6 +1,6 @@
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
 var products = [
-   {
+    {
         id: 1,
         name: 'cooking oil',
         price: 10.5,
@@ -70,11 +70,30 @@ var cartList = [];
 var cart = [];
 
 var total = 0;
+let totalProductos = 0;
 
 // Exercise 1
 function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    let idBuscado = Number(id);
+    let encontrado = false;
+    let elemento = -1;
+    let i = 0;
+    let long = products.length;
+
+    while (encontrado == false & i < long) {
+        if (idBuscado == products[i].id) {
+            encontrado = true;
+            elemento = i;
+            totalProductos += 1;
+            cartList.push(products[elemento]);
+        }
+        i++;// mientras no encuentre el id solicitado va incrementando el contador
+        //que le permitirá recorrer el array de objetos (products)
+    }
+    // añadir el producto al array cartList una vez he encontrado el id. 
+    document.getElementById("count_product").innerHTML = totalProductos; // y pinto el contador en el carrito
 }
 
 // Exercise 2
@@ -119,7 +138,7 @@ function removeFromCart(id) {
     // 2. Add found product to the cartList array
 }
 
-function open_modal(){
-	console.log("Open Modal");
-	printCart();
+function open_modal() {
+    console.log("Open Modal");
+    printCart();
 }
