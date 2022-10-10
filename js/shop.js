@@ -94,22 +94,31 @@ function buy(id) {
     }
     // añadir el producto al array cartList una vez he encontrado el id. 
     document.getElementById("count_product").innerHTML = totalProductos; // y pinto el contador en el carrito
+   
 }
 
 // Exercise 2
 function cleanCart() {
-    
     cartList.splice(0);// vacia el carrito 
     cart.splice(0);// vacia el carrito 
     totalProductos = 0;// pone el contador de productos a cero
     document.getElementById("count_product").innerHTML = totalProductos;
-    printCart(); 
+  
 
 }
 
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
+    let long = cartList.length;
+    let total = 0;// para calcular el total de la cesta de la compra
+    let i;
+    let cartListProducto;
+
+    for (i = 0; i < long; i++) {
+                total += Number(cartList[i].price);// aqui sumo directamente los precios porque en cada posicion del array hay siempre un unico producto
+            }
+    document.getElementById("total_price").innerHTML = total; 
 }
 
 // Exercise 4
