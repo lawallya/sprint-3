@@ -94,7 +94,7 @@ function buy(id) {
     }
     // añadir el producto al array cartList una vez he encontrado el id. 
     document.getElementById("count_product").innerHTML = totalProductos; // y pinto el contador en el carrito
-   
+
 }
 
 // Exercise 2
@@ -103,8 +103,6 @@ function cleanCart() {
     cart.splice(0);// vacia el carrito 
     totalProductos = 0;// pone el contador de productos a cero
     document.getElementById("count_product").innerHTML = totalProductos;
-  
-
 }
 
 // Exercise 3
@@ -116,9 +114,9 @@ function calculateTotal() {
     let cartListProducto;
 
     for (i = 0; i < long; i++) {
-                total += Number(cartList[i].price);// aqui sumo directamente los precios porque en cada posicion del array hay siempre un unico producto
-            }
-    document.getElementById("total_price").innerHTML = total; 
+        total += Number(cartList[i].price);// aqui sumo directamente los precios porque en cada posicion del array hay siempre un unico producto
+    }
+    document.getElementById("total_price").innerHTML = total;
 }
 
 // Exercise 4
@@ -146,17 +144,56 @@ function generateCart() {
             cart[total - 1].quantity = cantidadProducto;
             cart[total - 1].subtotal = cart[total - 1].quantity * cart[total - 1].price;
             cart[total - 1].subtotalWithDiscount = cart[total - 1].subtotal;
-            if (cart[total - 1].offer) { applyPromotionsCart() }
+            // if (cart[total - 1].offer) { applyPromotionsCart() }
             cantidadProducto = 0; //una vez que he pasado el producto al nuevo carrito de la compra, actualizo de nuevo el contador de producto 
             //a cero para comenzar a contar el siguiente producto
         }
     }
+    applyPromotionsCart()
 }
 
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    let grocery = 0;
+    let quantity = cart.length;
+    let j;
+    const aIndices = [];
+    let numberGrocery;
+    console.log("funcion applyDiscount")
+
+    // DESCUENTO 1:  como he mantenido los id y he ordenado el cart por id, conozco la posicion del aceite de oliva. 
+    //En otro caso tendria primero que buscarlo
+
+    for (i = 0; i < quantity; i++) {
+        if (cart[i].id == 1) {// el id=1 corresponde al aceite de oliva
+            if (cart[i].quantity >= 3) {
+                //cart[i].subtotal =  cart[i].price * cart[i].quantity;No hace falta, la he calculado en generateCart
+                cart[i].price = 10;
+                cart[i].subtotalWithDiscount = cart[i].price * cart[i].quantity;
+            }
+        }
+    }
+
+    //descuento 2
+    if (totalProductos >= 4) {
+        for (j = 0; j < quantity; j++) {
+
+            if (cart[j].type === "grocery") {// cuento cuantos productos comestibles hay.
+                grocery += cart[j].quantity;
+                aIndices.push(j);
+            }// segun voy encontrando productos de grocery voy guardando su indice en un nuevo array.
+        }   /* el subtotal en principio se calcula solo tal y como he puesto en la clase. Si no tendria que calcularlo aqui */
+        if (grocery >= 4) {
+            numberGrocery = aIndices.length;
+            for (i = 0; i < numberGrocery; i++) {
+                cart[aIndices[i]].subtotalWithDiscount = 0.66 * cart[aIndices[i]].subtotal;
+            }
+        }
+    }
 }
+
+
 
 // Exercise 6
 function printCart() {
