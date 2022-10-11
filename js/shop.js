@@ -228,38 +228,7 @@ function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
-    /*let indIdBuscado = products.findIndex(p => p.id == id);
-    console.log(indIdBuscado);
-    let idBuscado = Number(id);//encuentra el indicce del producto buscado para añadirlo a cart
-    let indProductoComprado = -2;
-    console.log("cart.length", cart.length, "idBuscado", id);
-
-    if (cart.length == 0) {//si el cart está inicalmente vacio, añado el producto
-        cart.push(products[indIdBuscado]);
-        cart[0].quantity = 1;
-        cart[0].subtotal = cart[0].price;
-
-    } else {//si el cart ya tiene productos, compruebo si hay que añadirlo o solo ampliar una unidad
-        indProductoComprado = cart.findIndex(p => p.id = idBuscado);
-        console.log(indProductoComprado)
-        if (indProductoComprado == -1) {//el producto NO está actualmente en la cesta
-            cart.push(products[idBuscado]);
-            cart[cart.length - 1].quantity = 1;
-            cart[cart.length - 1].subtotal = cart[cart.length - 1].quantity * cart[cart.length - 1].price;
-            console.table(cart);
-
-        } else {//el producto  está actualmente en la cesta
-            console.log(indProductoComprado);
-            cart[indProductoComprado].quantity += 1;
-            cart[indProductoComprado].subtotal = cart[indProductoComprado].quantity * cart[indProductoComprado].price;
-            console.table(cart);
-        }
-    }
-    totalProductos += 1;
-    applyPromotionsCart();
-    document.getElementById("count_product").innerHTML = totalProductos;
-
-}*/
+ 
 let productoElegido, ProductoCarrito;
   
   const indiceProductoElegido = products.findIndex(objeto => objeto.id === id);
