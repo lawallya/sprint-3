@@ -117,6 +117,12 @@ function calculateTotal() {
         total += Number(cartList[i].price);// aqui sumo directamente los precios porque en cada posicion del array hay siempre un unico producto
     }
     document.getElementById("total_price").innerHTML = total;
+
+    //calculamos el total  de la compra para el carro simplificado 
+
+
+
+
 }
 
 // Exercise 4
@@ -155,6 +161,7 @@ function generateCart() {
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    //esta funcion modifica algunos objetos del array cart
     let grocery = 0;
     let quantity = cart.length;
     let j;
@@ -166,19 +173,22 @@ function applyPromotionsCart() {
     //En otro caso tendria primero que buscarlo
 
     for (i = 0; i < quantity; i++) {
+        cart[i].subtotal = cart[i].price * cart[i].quantity;
+
         if (cart[i].id == 1) {// el id=1 corresponde al aceite de oliva
             if (cart[i].quantity >= 3) {
                 //cart[i].subtotal =  cart[i].price * cart[i].quantity;No hace falta, la he calculado en generateCart
                 cart[i].price = 10;
                 cart[i].subtotalWithDiscount = cart[i].price * cart[i].quantity;
             }
+            else { cart[i].subtotalWithDiscount = cart[i].subtotal }
         }
     }
 
     //descuento 2
     if (totalProductos >= 4) {
         for (j = 0; j < quantity; j++) {
-
+            cart[j].subtotal = cart[j].price * cart[j].quantity;
             if (cart[j].type === "grocery") {// cuento cuantos productos comestibles hay.
                 grocery += cart[j].quantity;
                 aIndices.push(j);
@@ -190,6 +200,7 @@ function applyPromotionsCart() {
                 cart[aIndices[i]].subtotalWithDiscount = 0.66 * cart[aIndices[i]].subtotal;
             }
         }
+        else { cart[j].subtotalWithDiscount = cart[j].subtotal}
     }
 }
 
@@ -206,13 +217,17 @@ function printCart() {
 
     for (j = 0; j < quantity; j++) {
         productoCarrito = cart[j];
-        total += productoCarrito.subtotalWithDiscount;
+        //total += productoCarrito.subtotalWithDiscount;
+
+        total += productoCarrito.subtotalWhithDiscount;
+        console.log(total);
         impresion += "<tr>" + "<th scope='row'>" +
             productoCarrito.name + "</th>" +
             "<td>" + productoCarrito.price + "</td>" +
             "<td>" + productoCarrito.quantity + "</td>" +
-            "<td>" + productoCarrito.subtotalWithDiscount + "</td>"
-        "</tr>";
+            "<td>" + productoCarrito.subtotalWithDiscount + "</td>" +
+            "<td> <button type='button' onclick='removeFromCart(productoCarrito.id)' class='btn btn-outline-dark'>"  Quitar  "</button> </td>" +
+            "</tr>";
 
         /* Probar con esto ${}*/
     }
@@ -228,48 +243,60 @@ function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
- 
-let productoElegido, ProductoCarrito;
-  
-  const indiceProductoElegido = products.findIndex(objeto => objeto.id === id);
 
-    if (indiceProductoElegido!= -1) {
+    let productoElegido, ProductoCarrito;
 
-      productoElegido = {...products[indiceProductoElegido]};
-      
+    const indiceProductoElegido = products.findIndex(objeto => objeto.id === id);
+    if (indiceProductoElegido != -1) {
+        productoElegido = { ...products[indiceProductoElegido] };
+
     }
+    const ProductoCarritoIndex = cart.findIndex(element => element.id === productoElegido.id);
+    if (ProductoCarritoIndex == -1) {
+        cart.push(productoElegido);
+        cart[cart.length - 1].quantity = 1;
+        cart[cart.length - 1].subtotal = cart[cart.length - 1].quantity * cart[cart.length - 1].price;
+        /*ProductoCarrito = cart.at(-1);
+        ProductoCarrito.quantity = 1;*/
 
-  const ProductoCarritoIndex = cart.findIndex(element => element.id === productoElegido.id);
-
-    if(ProductoCarritoIndex == -1) {
-
-      cart.push(productoElegido);
-      cart[cart.length-1].quantity= 1;
-      cart[cart.length-1].subtotal= cart[cart.length-1].quantity * cart[cart.length-1].price;
-      /*ProductoCarrito = cart.at(-1);
-      ProductoCarrito.quantity = 1;*/
-          
     } else {
-
-      ProductoCarrito = cart[indiceProductoElegido];
-      ProductoCarrito.quantity += 1;
-      ProductoCarrito.subTotal = ProductoCarrito.price * ProductoCarrito.quantity;
+        ProductoCarrito = cart[indiceProductoElegido];
+        ProductoCarrito.quantity += 1;
+        ProductoCarrito.subTotal = ProductoCarrito.price * ProductoCarrito.quantity;
     }
-    totalProductos +=1;
+    totalProductos += 1;
 
-    
-  applyPromotionsCart();
-  document.getElementById("count_product").innerHTML = totalProductos;
+    applyPromotionsCart();
+    document.getElementById("count_product").innerHTML = totalProductos;
 }
 
 
 
-
-
-// Exercise 8
+// Exercise 9
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+
+
+    let ProductoCarrito;
+
+    let indiceProductoQuitar = cart.findIndex(objeto => objeto.id === id);
+
+    ProductoCarrito = cart[indiceProductoQuitar];
+
+    if (ProductoCarrito.quantity > 0) {
+        ProductoCarrito.quantity -= 1;
+        ProductoCarrito.subTotal = ProductoCarrito.price * ProductoCarrito.quantity;
+        totalProductos -= 1;
+    }
+    if (ProductoCarrito.quantity == 0) {
+        cart.splice(indiceProductoQuitar, 1);
+    }
+
+    printCart();
+    applyPromotionsCart();
+    document.getElementById("count_product").innerHTML = totalProductos;
+
 }
 
 function open_modal() {
